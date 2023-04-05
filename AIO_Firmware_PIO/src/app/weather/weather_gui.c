@@ -168,7 +168,9 @@ void display_weather_init(lv_scr_load_anim_t anim_type)
     lv_label_set_text(txtLabel, "最低气温12°C, ");
     lv_obj_set_size(txtLabel, 120, 30);
     lv_label_set_long_mode(txtLabel, LV_LABEL_LONG_SCROLL_CIRCULAR);
-    lv_label_set_text_fmt(txtLabel, "最低气温%d°C, 最高气温%d°C, %s%d 级.   ", 15, 20, "西北风", 0);
+    //PFT
+    //lv_label_set_text_fmt(txtLabel, "最低气温%d°C, 最高气温%d°C, %s%d 级.   ", 15, 20, "西北风", 0);
+    lv_label_set_text_fmt(txtLabel, "%d°C ~ %d°C, %s%d 级.   ", 15, 20, "西北风", 0);
 
     clockLabel_1 = lv_label_create(scr_1);
     lv_obj_add_style(clockLabel_1, &numberBig_style, LV_STATE_DEFAULT);
@@ -255,9 +257,19 @@ void display_weather(struct Weather weaInfo, lv_scr_load_anim_t anim_type)
     }
     lv_label_set_text(btnLabel, airQualityCh[weaInfo.airQulity]);
     lv_img_set_src(weatherImg, weaImage_map[weaInfo.weather_code]);
+    //PFT
     // 下面这行代码可能会出错
-    lv_label_set_text_fmt(txtLabel, "最低气温%d°C, 最高气温%d°C, %s%d 级.   ",
-                          weaInfo.minTemp, weaInfo.maxTemp, weaInfo.windDir, weaInfo.windLevel);
+    // lv_label_set_text_fmt(txtLabel, "最低气温%d°C, 最高气温%d°C, %s%d 级.   ",
+    //                       weaInfo.minTemp, weaInfo.maxTemp, weaInfo.windDir, weaInfo.windLevel);
+    if(weaInfo.windLevel < 4)
+    {
+        lv_label_set_text_fmt(txtLabel, "%d°C ~ %d°C ", weaInfo.minTemp, weaInfo.maxTemp);
+    }
+    else
+    {
+        lv_label_set_text_fmt(txtLabel, "%d°C ~ %d°C, %s%d 级. ",
+                            weaInfo.minTemp, weaInfo.maxTemp, weaInfo.windDir, weaInfo.windLevel);
+    }
 
     lv_bar_set_value(tempBar, weaInfo.temperature, LV_ANIM_ON);
     lv_label_set_text_fmt(tempLabel, "%2d°C", weaInfo.temperature);
